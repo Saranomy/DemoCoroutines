@@ -23,15 +23,8 @@ class ExampleInstrumentedTest {
     val activityRule = ActivityTestRule(MainActivity::class.java)
 
     @Test
-    fun useAppContext() {
-        // Context of the app under test.
-        val appContext = InstrumentationRegistry.getInstrumentation().targetContext
-        assertEquals("com.saranomy.democoroutines", appContext.packageName)
-    }
-
-    @Test
     fun coroutinesSuccessfullyRun() {
-        // Perform click on RUN and wait for at least 5 seconds, then check if the result is Done.
+        // Perform click on RUN and wait for at least 5 seconds, then check if the result equals "Done."
         onView(withId(R.id.run)).perform(click())
         onView(isRoot()).perform(waitFor(5100))
         onView(withId(R.id.result)).check(matches(withText("Done.")))

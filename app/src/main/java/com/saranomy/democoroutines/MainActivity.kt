@@ -19,40 +19,39 @@ class MainActivity : AppCompatActivity() {
         run = findViewById(R.id.run)
 
         run.setOnClickListener {
-            // on Main thread
+            // On Main/UI thread
             result.text = "Starting..."
             threadName.text = Thread.currentThread().name
 
+            // Set the initial scope to IO to handle network or database work in the background
             CoroutineScope(Dispatchers.IO).launch {
-                // doing IO things on the background
-                var nameOfCurrentThread = Thread.currentThread().name
-                delay(1000) // Note: Thread.sleep() is for threads, not routines
+                val nameOfCurrentThread = Thread.currentThread().name
+
+                delay(1000) // Note: Thread.sleep() is for threads, use delay for coroutines
+
                 loadSomethingFromTheInternet()
 
-                updateUI("Processing...", nameOfCurrentThread)
+                updateUI("Processing...")
 
-                // Use Dispatchers.Default to do something CPU heavy
+                // Use Default to do something CPU intensive
                 withContext(Dispatchers.Default) {
                     crunchingNumbers()
                 }
 
-                // Finally go back to Main/UI scope to change Views
+                // Finally, go back to Main/UI scope to change Views
                 updateUI("Done.")
 
-                // Final note: threadName should show that they are almost operating on the same thread.
+                // Final note: threadName should show that they are almost operating on the same thread, and use different workers within the thread.
             }
         }
     }
 
-    // use suspend for coroutine function
-    private suspend fun updateUI(
-        resultText: String,
-        nameOfCurrentThread: String = Thread.currentThread().name
-    ) {
-        // Within the same scope, we can switch scope using withContext
+    // Use suspend for coroutine function
+    private suspend fun updateUI(resultText: String) {
+        // Within the same scope started by line 27, we can switch between scopes using withContext
         withContext(Dispatchers.Main) {
             result.text = resultText
-            threadName.text = "${threadName.text}\n${nameOfCurrentThread}"
+            threadName.append("\n${Thread.currentThread().name}")
         }
     }
 
