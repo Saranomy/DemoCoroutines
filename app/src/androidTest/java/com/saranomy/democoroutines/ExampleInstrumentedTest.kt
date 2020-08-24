@@ -41,7 +41,7 @@ class ExampleInstrumentedTest {
             }
 
             override fun getDescription(): String {
-                return "wait for " + delay + "milliseconds"
+                return "Wait for " + delay + "ms."
             }
         }
     }
