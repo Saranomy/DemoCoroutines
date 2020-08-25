@@ -25,8 +25,7 @@ class MainActivity : AppCompatActivity() {
 
             // Set the initial scope to IO to handle network or database work in the background
             CoroutineScope(Dispatchers.IO).launch {
-                val nameOfCurrentThread = Thread.currentThread().name
-
+                
                 delay(1000) // Note: Thread.sleep() is for threads, use delay for coroutines
 
                 loadSomethingFromTheInternet()
